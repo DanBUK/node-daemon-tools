@@ -1,4 +1,13 @@
-var daemon = require('./daemon');
+try {
+  var daemon = require('build/default/daemon');
+} catch (e) {
+  try {
+    var daemon = require('daemon');
+  } catch (e) {
+    console.log("Have you actually built the module yet?");
+    console.log("eg. node-waf configure build install");
+  }
+}
 var fs = require('fs');
 var http = require('http');
 var sys = require('sys');
@@ -13,14 +22,25 @@ var dPID;
 // Handle start stop commands
 switch(args[2]) {
 	case "stop":
-		process.kill(parseInt(fs.readFileSync(config.lockFile)));
-		process.exit(0);
+		var exit_val = 0;
+		try {
+			process.kill(parseInt(fs.readFileSync(config.lockFile)));
+		} catch (e) {
+			if (e.message == 'No such process') {
+				sys.puts("Error: Process is not running or wrong PID value.");
+				exit_val = 1;
+			} else {
+				sys.puts("Error unknown: " + sys.inspect(e));
+				exit_val = 2;
+			}
+		}
+		process.exit(exit_val);
 		break;
 		
 	case "start":
-		dPID = daemon.start();
+		dPID = daemon.start(false);
 		daemon.lock(config.lockFile);
-		daemon.closeIO();
+		daemon.closeIO(fs.openSync('/dev/null', 'w'));
 		break;
 		
 	default:

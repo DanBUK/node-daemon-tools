@@ -3,6 +3,7 @@
 *** A node.JS addon that allows creating Unix/Linux Daemons in pure Javascript.
 *** Copyright 2010 (c) <arthur@norgic.com>
 * Under MIT License. See LICENSE file.
+* Updated by Daniel Bartlett 2011 <dan@f-box.org>
 */
 
 #include <v8.h>
@@ -10,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <ev.h>
 
 #define PID_MAXLEN 10
 
@@ -19,10 +21,19 @@ using namespace v8;
 // if successful, returns daemon's PID
 Handle<Value> Start(const Arguments& args) {
 	pid_t pid, sid;
-	
+	int do_cd_root;
+	if (args.Length() < 1) {
+		return ThrowException(Exception::TypeError(
+			String::New("Must have one argument true/false as to if we cd /")));
+	}
+
+	do_cd_root = args[0]->Int32Value();
+
 	pid = fork();
 	if(pid > 0) exit(0);
 	if(pid < 0) exit(1);
+
+	ev_default_fork();
 	
 	// Can be changed after with process.umaks
 	umask(0);
@@ -31,16 +42,18 @@ Handle<Value> Start(const Arguments& args) {
 	if(sid < 0) exit(1);
 	
 	// Can be changed with process.chdir
-	chdir("/");
+	if (do_cd_root == 1) {
+		chdir("/");
+	}
 	
 	return Integer::New(getpid());
 }
 
 // Close Standard IN/OUT/ERR Streams
 Handle<Value> CloseIO(const Arguments& args) {
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+	freopen("/dev/null", "r", stdin);
+	freopen("/dev/null", "w", stdout);
+	freopen("/dev/null", "w", stderr);
 }
 
 // File-lock to make sure that only one instance of daemon is running.. also for storing PID
