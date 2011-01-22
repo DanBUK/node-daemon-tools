@@ -78,10 +78,56 @@ Handle<Value> LockD(const Arguments& args) {
 	return Boolean::New(true);
 }
 
+
+const char* ToCString(const v8::String::Utf8Value& value) {
+	return *value ? *value : "<string conversion failed>";
+}
+
+/* chroot ( folder )
+ * folder: The new root
+*/
+Handle<Value> Chroot(const Arguments& args) {
+	if (args.Length() < 1) {
+		return ThrowException(Exception::TypeError(
+			String::New("Must have one argument; a string of the folder to chroot to.")
+		));
+	}
+	uid_t uid;
+	int rv;
+
+	uid = getuid();
+	if (uid != 0) {
+		return ThrowException(Exception::Error(
+			String::New("You must be root in order to use chroot.")
+		));
+	}
+
+	String::Utf8Value folderUtf8(args[0]->ToString());
+	const char *folder = ToCString(folderUtf8);
+/*
+	rv = chdir(folder);
+	if (rv != 0) {
+		return ThrowException(Exception::Error(
+			String::New("Failed to cd to the folder.")
+		));
+	}
+*/
+	rv = chroot(folder);
+	if (rv != 0) {
+		return ThrowException(Exception::Error(
+			String::New("Failed do chroot to the folder.")
+		));
+	}
+	chdir("/");
+
+	return Boolean::New(true);
+}
+
 extern "C" void init(Handle<Object> target) {
 	HandleScope scope;
 	
 	target->Set(String::New("start"), FunctionTemplate::New(Start)->GetFunction());
 	target->Set(String::New("lock"), FunctionTemplate::New(LockD)->GetFunction());
 	target->Set(String::New("closeIO"), FunctionTemplate::New(CloseIO)->GetFunction());
+	target->Set(String::New("chroot"), FunctionTemplate::New(Chroot)->GetFunction());
 }
