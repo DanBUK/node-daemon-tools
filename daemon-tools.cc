@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <ev.h>
+#include <pwd.h>
 
 #define PID_MAXLEN 10
 
@@ -115,6 +116,27 @@ Handle<Value> Chroot(const Arguments& args) {
 	return Boolean::New(true);
 }
 
+// Allow changing the real and effective user ID of this process so a root process
+// can become unprivileged
+Handle<Value> SetREUID(const Arguments& args) {
+	if(args.Length() == 0 || !args[0]->IsString())
+		return ThrowException(Exception::Error(
+			String::New("Must give a username to become")
+		));
+	
+	String::AsciiValue username(args[0]);
+	
+	struct passwd* pwd_entry = getpwnam(*username);
+	
+	if(pwd_entry) {
+		setreuid(pwd_entry->pw_uid, pwd_entry->pw_uid);
+	} else {
+		return ThrowException(Exception::Error(
+			String::New("User not found")
+		));
+	}
+}
+
 extern "C" void init(Handle<Object> target) {
 	HandleScope scope;
 	
@@ -122,4 +144,5 @@ extern "C" void init(Handle<Object> target) {
 	target->Set(String::New("lock"), FunctionTemplate::New(LockD)->GetFunction());
 	target->Set(String::New("closeIO"), FunctionTemplate::New(CloseIO)->GetFunction());
 	target->Set(String::New("chroot"), FunctionTemplate::New(Chroot)->GetFunction());
+	target->Set(String::New("setreuid"), FunctionTemplate::New(SetREUID)->GetFunction());
 }
