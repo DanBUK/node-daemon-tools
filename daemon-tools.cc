@@ -104,14 +104,6 @@ Handle<Value> Chroot(const Arguments& args) {
 
 	String::Utf8Value folderUtf8(args[0]->ToString());
 	const char *folder = ToCString(folderUtf8);
-/*
-	rv = chdir(folder);
-	if (rv != 0) {
-		return ThrowException(Exception::Error(
-			String::New("Failed to cd to the folder.")
-		));
-	}
-*/
 	rv = chroot(folder);
 	if (rv != 0) {
 		return ThrowException(Exception::Error(
