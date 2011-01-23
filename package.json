@@ -1,0 +1,58 @@
+{
+  "name": "daemon",
+  "description": "Add-on for creating *nix daemons, handling chroots, etc.",
+  "homepage": "https://github.com/DanBUK/node-daemon",
+  "version": "0.2.0",
+  "maintainers": [
+    {
+      "name": "Daniel Bartlett",
+      "email": "dan@f-box.org"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Daniel Bartlett",
+      "email": "dan@f-box.org"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/DanBUK/node-daemon/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git://github.com/DanBUK/node-daemon.git"
+    }
+  ],
+  "main": "./node-daemon",
+  "scripts": {
+    "build": "node-waf configure build",
+    "test": "node-waf test",
+    "doc": "node-waf doc",
+    "preinstall": "node-waf configure build"
+  },
+  "engines": {
+    "node": ">=0.2.5"
+  },
+  "_id": "daemon@0.2.0",
+  "_nodeSupported": true,
+  "_npmVersion": "0.2.15",
+  "_nodeVersion": "v0.2.5",
+  "dist": {
+    "shasum": "",
+    "tarball": "http://registry.npmjs.org/mysql-libmysqlclient/-/mysql-libmysqlclient-1.1.1.tgz"
+  },
+  "directories": {
+    ""
+  },
+  "_engineSupported": true,
+  "files": [
+    ""
+  ],
+  "_defaultsLoaded": true
+}
