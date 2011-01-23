@@ -1,7 +1,7 @@
 {
   "name": "daemon-tools",
   "description": "Add-on for creating *nix daemons, handling chroots, etc.",
-  "homepage": "https://github.com/DanBUK/node-daemon",
+  "homepage": "https://github.com/DanBUK/node-daemon-tools",
   "version": "0.1.0",
   "maintainers": [
     {
@@ -16,7 +16,7 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/DanBUK/node-daemon/issues"
+    "url": "https://github.com/DanBUK/node-daemon-tools/issues"
   },
   "licenses": [
     {
@@ -26,10 +26,10 @@
   "repositories": [
     {
       "type": "git",
-      "url": "git://github.com/DanBUK/node-daemon.git"
+      "url": "git://github.com/DanBUK/node-daemon-tools.git"
     }
   ],
-  "main": "./node-daemon",
+  "main": "./daemon-tools",
   "scripts": {
     "build": "node-waf configure build",
     "test": "node-waf test",

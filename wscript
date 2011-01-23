@@ -1,6 +1,6 @@
 srcdir = "."
 blddir = "build"
-VERSION = "0.0.1"
+VERSION = "0.1.0"
 
 def set_options(opt):
   opt.tool_options("compiler_cxx")
@@ -12,4 +12,4 @@ def configure(conf):
 def build(bld):
   obj = bld.new_task_gen("cxx", "shlib", "node_addon")
   obj.target = "daemon-tools"
-  obj.source = "daemon.cc"
+  obj.source = "daemon-tools.cc"
