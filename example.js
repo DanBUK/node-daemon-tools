@@ -40,7 +40,7 @@ switch(args[2]) {
 	case "start":
 		dPID = daemon-tools.start(false);
 		daemon-tools.lock(config.lockFile);
-		daemon-tools.closeIO(fs.openSync('/dev/null', 'w'));
+		daemon-tools.closeIO();
 		break;
 		
 	default:
