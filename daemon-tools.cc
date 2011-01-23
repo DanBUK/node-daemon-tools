@@ -119,6 +119,19 @@ Handle<Value> Chroot(const Arguments& args) {
 // Allow changing the real and effective user ID of this process so a root process
 // can become unprivileged
 Handle<Value> SetREUID(const Arguments& args) {
+	uid_t uid;
+	if(args.Length() == 0)
+		return ThrowException(Exception::Error(
+			String::New("Must give a uid to become")
+		));
+	
+	uid = args[0]->Int32Value();
+	setreuid(uid, uid);
+}
+
+// Allow changing the real and effective user ID of this process so a root process
+// can become unprivileged
+Handle<Value> SetREUID_username(const Arguments& args) {
 	if(args.Length() == 0 || !args[0]->IsString())
 		return ThrowException(Exception::Error(
 			String::New("Must give a username to become")
@@ -137,6 +150,7 @@ Handle<Value> SetREUID(const Arguments& args) {
 	}
 }
 
+
 extern "C" void init(Handle<Object> target) {
 	HandleScope scope;
 	
@@ -144,5 +158,6 @@ extern "C" void init(Handle<Object> target) {
 	target->Set(String::New("lock"), FunctionTemplate::New(LockD)->GetFunction());
 	target->Set(String::New("closeIO"), FunctionTemplate::New(CloseIO)->GetFunction());
 	target->Set(String::New("chroot"), FunctionTemplate::New(Chroot)->GetFunction());
+	target->Set(String::New("setreuid_username"), FunctionTemplate::New(SetREUID_username)->GetFunction());
 	target->Set(String::New("setreuid"), FunctionTemplate::New(SetREUID)->GetFunction());
 }
