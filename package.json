@@ -34,7 +34,7 @@
     "build": "node-waf configure build",
     "test": "node-waf test",
     "doc": "node-waf doc",
-    "preinstall": "node-waf configure build"
+    "preinstall": "node-waf configure build install"
   },
   "engines": {
     "node": ">=0.2.5"
