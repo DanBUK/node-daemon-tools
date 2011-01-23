@@ -1,8 +1,8 @@
 try {
-  var daemon = require('build/default/daemon');
+  var daemon-tools = require('build/default/daemon-tools');
 } catch (e) {
   try {
-    var daemon = require('daemon');
+    var daemon-tools = require('daemon-tools');
   } catch (e) {
     console.log("Have you actually built the module yet?");
     console.log("eg. node-waf configure build install");
@@ -38,9 +38,9 @@ switch(args[2]) {
 		break;
 		
 	case "start":
-		dPID = daemon.start(false);
-		daemon.lock(config.lockFile);
-		daemon.closeIO(fs.openSync('/dev/null', 'w'));
+		dPID = daemon-tools.start(false);
+		daemon-tools.lock(config.lockFile);
+		daemon-tools.closeIO(fs.openSync('/dev/null', 'w'));
 		break;
 		
 	default:

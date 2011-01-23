@@ -1,8 +1,8 @@
 {
-  "name": "daemon",
+  "name": "daemon-tools",
   "description": "Add-on for creating *nix daemons, handling chroots, etc.",
   "homepage": "https://github.com/DanBUK/node-daemon",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "maintainers": [
     {
       "name": "Daniel Bartlett",
@@ -39,20 +39,14 @@
   "engines": {
     "node": ">=0.2.5"
   },
-  "_id": "daemon@0.2.0",
+  "_id": "daemon-tools@0.1.0",
   "_nodeSupported": true,
   "_npmVersion": "0.2.15",
   "_nodeVersion": "v0.2.5",
   "dist": {
     "shasum": "",
-    "tarball": "http://registry.npmjs.org/mysql-libmysqlclient/-/mysql-libmysqlclient-1.1.1.tgz"
-  },
-  "directories": {
-    ""
+    "tarball": ""
   },
   "_engineSupported": true,
-  "files": [
-    ""
-  ],
   "_defaultsLoaded": true
 }

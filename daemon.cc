@@ -1,5 +1,5 @@
 /*
-* Daemon.node
+* daemon-tools.node
 *** A node.JS addon that allows creating Unix/Linux Daemons in pure Javascript.
 *** Copyright 2010 (c) <arthur@norgic.com>
 * Under MIT License. See LICENSE file.
