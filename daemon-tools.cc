@@ -69,7 +69,7 @@ Handle<Value> LockD(const Arguments& args) {
 	String::Utf8Value data(args[0]->ToString());
 	char pid_str[PID_MAXLEN+1];
 	
-	int lfp = open(*data, O_RDWR | O_CREAT, 0640);
+	int lfp = open(*data, O_RDWR | O_CREAT | O_TRUNC, 0640);
 	if(lfp < 0) exit(1);
 	if(lockf(lfp, F_TLOCK, 0) < 0) exit(0);
 	
