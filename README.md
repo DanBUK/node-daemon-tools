@@ -53,6 +53,29 @@ This library also exposes a higher level facility through javascript for startin
   });
 ```
 
+
+### Methods Available
+
+#### daemon.start([fd for stdout and stderr])
+  If you supply a file descriptor it will redirect stdout and stderr to it, else stdout and stderr will be sent to /dev/null.
+#### daemon.closeStdin()
+  Closes stdin and reopens fd as /dev/null.
+#### daemon.closeStdout()
+  Closes stdout and reopens fd as /dev/null.
+#### daemon.closeStderr()
+  Closes stderr and reopens fd as /dev/null.
+#### daemon.closeStdio()
+  Closes std[in|out|err] and reopens fd as /dev/null.
+#### daemon.lock('/file_to_lock')
+  Try to lock the file. If it's unable to OPEN the file it will exit. If it's unable to get a LOCK on the file it will return false. Else it will return true.
+#### daemon.setsid()
+  Starts a new session for the process. Returns the SID as an integer.
+#### daemon.chroot('/path_to_chroot_to')
+  Attempts to chroot the process, returns exception on error, returns true on success.
+#### daemon.setreuid(1000)
+  Change the effective user of the process. Can take either an integer (UID) or a string (Username). Returns exceptions on error and true on success.
+
+
 ### The Fine Print
 This library is available under the MIT LICENSE. See the LICENSE file for more details. It was created by [Slashed][2] and [forked][3] / [improved][4] / [hacked upon][1] by a lot of good people. Special thanks to [Isaacs][5] for npm and a great example in [glob][6].
 
