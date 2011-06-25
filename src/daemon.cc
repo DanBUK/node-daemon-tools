@@ -174,6 +174,7 @@ Handle<Value> SetReuid(const Arguments& args) {
 
     if (pwd_entry) {
       setreuid(pwd_entry->pw_uid, pwd_entry->pw_uid);
+      return Boolean::New(true);
     } 
     else {
       return ThrowException(Exception::Error(
@@ -185,6 +186,7 @@ Handle<Value> SetReuid(const Arguments& args) {
     uid_t uid;
     uid = args[0]->Int32Value();
     setreuid(uid, uid);
+    return Boolean::New(true);
   }
 }
 
