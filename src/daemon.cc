@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <pwd.h>
+#include <string.h>
 
 #define PID_MAXLEN 10
 
@@ -190,6 +191,26 @@ Handle<Value> SetReuid(const Arguments& args) {
   }
 }
 
+Handle<Value> ExecVP(const Arguments& args) {
+  if (args.Length() < 2 || !args[0]->IsString() || !args[1]->IsArray()) {
+    return ThrowException(Exception::Error(String::New("Bad argument.")));
+  }
+  String::Utf8Value fileutf8(args[0]->ToString());
+  char *file = strdup(*fileutf8);
+  Local<Array> argv_handle = Local<Array>::Cast(args[1]);
+  int i;
+  int argc = argv_handle->Length();
+  int argv_length = argc + 1 + 1;
+  char **argv = new char*[argv_length]; // heap allocated to detect errors
+  argv[0] = strdup(*fileutf8); // + 1 for file
+  argv[argv_length-1] = NULL;  // + 1 for NULL;
+  for (i = 0; i < argc; i++) {
+    String::Utf8Value arg(argv_handle->Get(Integer::New(i))->ToString());
+    argv[i+1] = strdup(*arg);
+  }
+  execvp(file, argv);
+}
+
 //
 // Initialize this add-on
 //
@@ -201,6 +222,7 @@ extern "C" void init(Handle<Object> target) {
   NODE_SET_METHOD(target, "setsid", SetSid);
   NODE_SET_METHOD(target, "chroot", Chroot);
   NODE_SET_METHOD(target, "setreuid", SetReuid);
+  NODE_SET_METHOD(target, "execvp", ExecVP);
   NODE_SET_METHOD(target, "closeStderr", CloseStderr);
   NODE_SET_METHOD(target, "closeStdout", CloseStdout);
   NODE_SET_METHOD(target, "closeStdin", CloseStdin);
